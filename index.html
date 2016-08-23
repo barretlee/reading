@@ -32,7 +32,7 @@ Reading.prototype.init = function() {
       if(data.img == 'http://ifttt.com/images/no_image_card.png') {
         data.img = '';
       }
-      data.img = data.img || 'http://avatar.duoshuo.com/avatar-50/292/117200.jpg';
+      // data.img = data.img || 'http://avatar.duoshuo.com/avatar-50/292/117200.jpg';
       self.add(data);
     }
   });
@@ -163,6 +163,7 @@ body {
   text-align: center;
   line-height: 150px;
   text-shadow: 1px 1px 1px #CCC;
+  overflow: hidden;
 }
 .wrapper ul li div {
   padding: 20px 20px 10px 170px;
@@ -226,6 +227,7 @@ body {
   .wrapper ul li img {
     width: 120px;
     height: 120px;
+    line-height: 120px;
   }
   .wrapper ul li div {
     padding-left: 135px;
@@ -253,6 +255,7 @@ body {
   .wrapper ul li img {
     width: 80px;
     height: 80px;
+    line-height: 80px;
   }
   .wrapper ul li div {
     padding-left: 95px;
