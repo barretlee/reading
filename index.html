@@ -28,7 +28,10 @@ var Reading = function() {
 Reading.prototype.init = function() {
   var self = this;
   this.socket.on('broadcast', function(data) {
-    if(data.url && data.title && data.detail) {
+    if(data.url && data.title) {
+      if(data.img == 'http://ifttt.com/images/no_image_card.png') {
+        data.img = '';
+      }
       data.img = data.img || 'http://avatar.duoshuo.com/avatar-50/292/117200.jpg';
       self.add(data);
     }
