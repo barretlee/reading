@@ -37,6 +37,11 @@ Reading.prototype.router = function(req, res) {
     res.end(FAVICON);
   } else if(req.url === '/new') {
     bodyParser(req, res, function() {
+      var keys = Object.keys(req.body);
+      if(keys && keys[0] && keys[0].length > 20 && req.body[keys[0]] === '') {
+        req.body.data = keys[0];
+      }
+      console.log(req.body);
       if(req.body.data) {
         try {
           data = JSON.parse(req.body.data);
