@@ -19,7 +19,35 @@ function htmlspecialchars(str){
   str = str.replace(/'/g, '&#039;');
   return str;
 }
+
+function notify(notice) {
+  if (!("Notification" in window)) {
+    window.console && console.warn("浏览器不支持提醒");
+  } else if (Notification.permission === "granted") {
+    var notification = new Notification(notice.title, notice);
+  } else if (Notification.permission !== 'denied') {
+    Notification.requestPermission(function(permission) {
+      if (permission === "granted") {
+        var notification = new Notification(notice.title, notice);
+      }
+    });
+  }
+
+  if (notification) {
+    notification.onclick = function() {
+      if(notice.url) {
+        window.open(notice.url);
+      } else {
+        window.focus();
+      }
+      notification.close();
+    }
+  }
+}
 var Reading = function() {
+  if(window.location.protocol === 'https:') {
+    window.location.reload(window.location.href.replace('https:', 'http:'));
+  }
   // this.socket = io.connect('http://123.56.230.53:29232/');
   this.socket = io.connect();
   this.init();
@@ -28,12 +56,19 @@ var Reading = function() {
 Reading.prototype.init = function() {
   var self = this;
   this.socket.on('broadcast', function(data) {
+    console.log(data);
     if(data.url && data.title) {
       if(data.img == 'http://ifttt.com/images/no_image_card.png') {
         data.img = '';
       }
       // data.img = data.img || 'http://avatar.duoshuo.com/avatar-50/292/117200.jpg';
       self.add(data);
+      notify({
+        title: "小胡子哥推荐阅读",
+        icon: data.img || 'http://avatar.duoshuo.com/avatar-50/292/117200.jpg',
+        body: data.title,
+        url: data.url
+      });
     }
   });
 };
@@ -63,6 +98,7 @@ $(function() {
 
 </script>
 
+<div class="rainbow"></div>
 <div class="wrapper">
   <div class="title">
     <h1>小胡子哥正在看</h1>
@@ -104,8 +140,26 @@ html, body  {
   height: 100%;
 }
 body {
+  -webkit-tap-highlight-color: transparent;
+  font-size: 16px;
+  color: #2f2f2f;
+  background: #fff;
   font-family: Georgia, serif;
-  background: #FAFAFA;
+}
+.rainbow {
+  height: 4px;
+  text-indent: -9999px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  right: -2px;
+  z-index: 108;
+  background: #003973;
+  background: -moz-linear-gradient(left, #003973 0%, #e5e5be 100%);
+  background: -webkit-linear-gradient(left, #003973 0%, #e5e5be 100%);
+  background: linear-gradient(to right, #003973 0%, #e5e5be 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#003973', endColorstr='#e5e5be',GradientType=0 );
+  left: -2px;
 }
 .wrapper {
   width: 100%;
